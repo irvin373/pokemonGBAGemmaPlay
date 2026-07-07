@@ -141,3 +141,9 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# User-supplied ROMs (FR-001: never bundle/distribute a ROM)
+*.gba
+*.gbc
+*.gb
+*.zip
