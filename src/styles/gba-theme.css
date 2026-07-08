@@ -1,0 +1,336 @@
+:root {
+  --shell-purple-hi: #8b7bc0;
+  --shell-purple: #6a5aa0;
+  --shell-purple-lo: #4b3d7d;
+  --shell-purple-shadow: #2f2557;
+  --screen-bezel: #1c1a2e;
+  --screen-black: #05050a;
+  --btn-face: #4a1552;
+  --btn-face-hi: #7a2a86;
+  --btn-dpad: #211f2e;
+  --btn-dpad-hi: #38354a;
+  --btn-system: #d9d4e8;
+  --led-red: #ff3b3b;
+  --text-cream: #f2eefc;
+  --card-bg: #201d33;
+  --card-border: #453a6e;
+  --accent: #b79cff;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% -10%, #2a2450 0%, #100e1e 55%, #08070f 100%);
+  color: var(--text-cream);
+}
+
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.main-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 28px;
+}
+
+.app-header {
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(183, 156, 255, 0.5);
+  margin: 0;
+}
+
+/* ---------- GBA shell ---------- */
+
+.gba-shell {
+  flex: 0 1 560px;
+  width: 100%;
+  max-width: 560px;
+  background: linear-gradient(160deg, var(--shell-purple-hi) 0%, var(--shell-purple) 45%, var(--shell-purple-lo) 100%);
+  border-radius: 28px 28px 56px 56px;
+  padding: 20px 22px 32px;
+  box-shadow:
+    0 12px 0 var(--shell-purple-shadow),
+    0 24px 40px rgba(0, 0, 0, 0.55),
+    inset 0 2px 0 rgba(255, 255, 255, 0.25);
+  position: relative;
+}
+
+.gba-top-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.speaker-grille {
+  display: flex;
+  gap: 5px;
+  transform: rotate(-24deg);
+  opacity: 0.6;
+}
+
+.speaker-grille span {
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--shell-purple-shadow);
+}
+
+.screen-bezel {
+  position: relative;
+  background: var(--screen-bezel);
+  border-radius: 14px;
+  padding: 16px 16px 28px;
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.8), inset 0 0 0 3px #0c0b18;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.power-led {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--led-red);
+  box-shadow: 0 0 6px 2px rgba(255, 59, 59, 0.7);
+}
+
+.power-led.is-off {
+  background: #4a1414;
+  box-shadow: none;
+}
+
+.gba-screen {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 3 / 2;
+  image-rendering: pixelated;
+  background: var(--screen-black);
+  border-radius: 4px;
+  display: block;
+}
+
+.brand-label {
+  margin-top: 10px;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  color: #cfc9e6;
+}
+
+.brand-label span {
+  color: var(--accent);
+}
+
+/* ---------- Controller ---------- */
+
+.gba-controller {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-areas:
+    'shoulder shoulder shoulder'
+    'dpad     .        face'
+    '.        system   .';
+  row-gap: 18px;
+  align-items: center;
+}
+
+.shoulder-group {
+  grid-area: shoulder;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 -6px;
+}
+
+.shoulder-group button {
+  width: 64px;
+  height: 22px;
+  border: none;
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(180deg, var(--btn-dpad-hi), var(--btn-dpad));
+  color: var(--text-cream);
+  font-weight: 700;
+  font-size: 0.7rem;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.shoulder-group button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.dpad-group {
+  grid-area: dpad;
+  justify-self: start;
+  display: grid;
+  grid-template-columns: repeat(3, 34px);
+  grid-template-rows: repeat(3, 34px);
+  grid-template-areas:
+    '.    up    .'
+    'left center right'
+    '.    down  .';
+}
+
+.dpad-group button {
+  border: none;
+  background: linear-gradient(180deg, var(--btn-dpad-hi), var(--btn-dpad));
+  color: var(--text-cream);
+  font-size: 0.6rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dpad-group button:active {
+  filter: brightness(1.3);
+}
+
+.dpad-group button[data-testid='gba-button-UP'] {
+  grid-area: up;
+  border-radius: 4px 4px 0 0;
+}
+
+.dpad-group button[data-testid='gba-button-DOWN'] {
+  grid-area: down;
+  border-radius: 0 0 4px 4px;
+}
+
+.dpad-group button[data-testid='gba-button-LEFT'] {
+  grid-area: left;
+  border-radius: 4px 0 0 4px;
+}
+
+.dpad-group button[data-testid='gba-button-RIGHT'] {
+  grid-area: right;
+  border-radius: 0 4px 4px 0;
+}
+
+.face-group {
+  grid-area: face;
+  justify-self: end;
+  position: relative;
+  width: 96px;
+  height: 64px;
+}
+
+.face-group button {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(180deg, var(--btn-face-hi), var(--btn-face));
+  color: var(--text-cream);
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.face-group button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.face-group button[data-testid='gba-button-A'] {
+  right: 0;
+  top: 4px;
+}
+
+.face-group button[data-testid='gba-button-B'] {
+  left: 0;
+  bottom: 4px;
+}
+
+.system-group {
+  grid-area: system;
+  display: flex;
+  gap: 18px;
+  transform: rotate(-20deg);
+}
+
+.system-group button {
+  width: 46px;
+  height: 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--btn-system);
+  color: #2a2540;
+  font-size: 0.55rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.system-group button:active {
+  transform: translateY(1px);
+}
+
+/* ---------- Control deck (info/training panels, beside the console) ---------- */
+
+.control-deck {
+  flex: 1 1 360px;
+  min-width: 300px;
+  max-width: 420px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.deck-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.deck-card h2 {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.session-error {
+  width: 100%;
+  max-width: 560px;
+  background: #3a1424;
+  border: 1px solid #8a2a4a;
+  color: #ffd7e2;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.control-deck button,
+.control-deck select,
+.control-deck input[type='file'] {
+  font-family: inherit;
+}

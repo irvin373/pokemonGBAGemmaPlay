@@ -1,5 +1,7 @@
 # pokemonGBAGemmaPlay
 
+![RNNPokemon — GBA in the browser, with AI autoplay and RL training panels](docs/screenshot.webp)
+
 Browser-based GBA emulator for playing a user-supplied Pokemon FireRed ROM, with local save states and two autoplay modes:
 
 - **LLM autoplay** — driven by a locally-running Ollama vision model.

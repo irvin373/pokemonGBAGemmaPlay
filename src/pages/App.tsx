@@ -145,84 +145,124 @@ export function App() {
   };
 
   return (
-    <main>
-      <h1>RNNPokemon — GBA in the Browser</h1>
-      <RomLoader core={core} session={session} />
+    <main className="app-shell">
+      <header className="app-header">
+        <h1>RNNPokemon — GBA in the Browser</h1>
+      </header>
+
+      <div className="deck-card" style={{ width: '100%', maxWidth: 560 }}>
+        <RomLoader core={core} session={session} />
+      </div>
+
       {state.status === 'error' && (
-        <p role="alert" data-testid="session-error">
+        <p role="alert" data-testid="session-error" className="session-error">
           {state.errorMessage}
         </p>
       )}
-      <Display core={core} />
-      <Controller core={core} onManualInput={takeManualControl} />
-      {hasActiveRom && (
-        <>
-          {isRlActive ? (
-            <p data-testid="save-load-blocked-by-rl">
-              Save/load is unavailable while RL training or inference is active.
-            </p>
-          ) : (
-            <>
-              <SaveStatePanel
-                core={core}
-                romChecksum={state.romChecksum}
-                onSaved={() => setSaveStateRefreshKey((key) => key + 1)}
-              />
-              <LoadStatePanel
-                core={core}
-                romChecksum={state.romChecksum}
-                refreshKey={saveStateRefreshKey}
-                onLoaded={takeManualControl}
+
+      <div className="main-row">
+        <div className="gba-shell">
+          <div className="gba-top-row">
+            <div className="speaker-grille">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
+          <div className="screen-bezel">
+            <div className={`power-led${hasActiveRom ? '' : ' is-off'}`} />
+            <Display core={core} />
+            <div className="brand-label">
+              GAME BOY <span>ADVANCE</span>
+            </div>
+          </div>
+          <Controller core={core} onManualInput={takeManualControl} />
+        </div>
+
+        {hasActiveRom && (
+          <div className="control-deck">
+            {isRlActive ? (
+              <p data-testid="save-load-blocked-by-rl" className="deck-card">
+                Save/load is unavailable while RL training or inference is active.
+              </p>
+            ) : (
+              <div className="deck-card">
+                <h2>Save / Load</h2>
+                <SaveStatePanel
+                  core={core}
+                  romChecksum={state.romChecksum}
+                  onSaved={() => setSaveStateRefreshKey((key) => key + 1)}
+                />
+                <LoadStatePanel
+                  core={core}
+                  romChecksum={state.romChecksum}
+                  refreshKey={saveStateRefreshKey}
+                  onLoaded={takeManualControl}
+                  onError={(message) => session.reportError(message)}
+                />
+              </div>
+            )}
+
+            <div className="deck-card">
+              <h2>AI Autoplay</h2>
+              <AIControlPanel
+                active={state.controlMode === 'ai-llm'}
+                onEnable={(profile) => {
+                  profileRef.current = profile;
+                  session.enableLlmControl(profile.id);
+                  decisionLoop.start();
+                }}
+                onDisable={takeManualControl}
                 onError={(message) => session.reportError(message)}
               />
-            </>
-          )}
-          <AIControlPanel
-            active={state.controlMode === 'ai-llm'}
-            onEnable={(profile) => {
-              profileRef.current = profile;
-              session.enableLlmControl(profile.id);
-              decisionLoop.start();
-            }}
-            onDisable={takeManualControl}
-            onError={(message) => session.reportError(message)}
-          />
-          {state.controlMode === 'ai-llm' && aiMessage && (
-            <p data-testid="ai-message">
-              <strong>AI:</strong> {aiMessage}
-            </p>
-          )}
-          <RLTrainingPanel
-            status={rlMetrics.status}
-            onStart={() => {
-              activeRlPolicyIdRef.current = null;
-              session.startRlTraining(null);
-              rlController.start();
-            }}
-            onPause={() => {
-              rlController.pause();
-              session.takeManualControl();
-            }}
-            onResume={() => {
-              session.startRlTraining(activeRlPolicyIdRef.current);
-              rlController.resume();
-            }}
-            onReset={() => {
-              activeRlPolicyIdRef.current = null;
-              rlController.reset();
-              session.takeManualControl();
-            }}
-            onSavePolicy={handleSavePolicy}
-          />
-          {state.controlMode === 'rl-training' && <RLMetricsView metrics={rlMetrics} />}
-          <RLPolicyLibrary
-            romChecksum={state.romChecksum}
-            refreshKey={rlPolicyRefreshKey}
-            onRunAsController={(policyId) => void handleRunPolicyAsController(policyId)}
-            onResumeTraining={(policyId) => void handleResumeTrainingFromPolicy(policyId)}
-          />
-        </>
-      )}
+              {state.controlMode === 'ai-llm' && aiMessage && (
+                <p data-testid="ai-message">
+                  <strong>AI:</strong> {aiMessage}
+                </p>
+              )}
+            </div>
+
+            <div className="deck-card">
+              <h2>RL Training</h2>
+              <RLTrainingPanel
+                status={rlMetrics.status}
+                onStart={() => {
+                  activeRlPolicyIdRef.current = null;
+                  session.startRlTraining(null);
+                  rlController.start();
+                }}
+                onPause={() => {
+                  rlController.pause();
+                  session.takeManualControl();
+                }}
+                onResume={() => {
+                  session.startRlTraining(activeRlPolicyIdRef.current);
+                  rlController.resume();
+                }}
+                onReset={() => {
+                  activeRlPolicyIdRef.current = null;
+                  rlController.reset();
+                  session.takeManualControl();
+                }}
+                onSavePolicy={handleSavePolicy}
+              />
+              {state.controlMode === 'rl-training' && <RLMetricsView metrics={rlMetrics} />}
+            </div>
+
+            <div className="deck-card">
+              <h2>RL Policy Library</h2>
+              <RLPolicyLibrary
+                romChecksum={state.romChecksum}
+                refreshKey={rlPolicyRefreshKey}
+                onRunAsController={(policyId) => void handleRunPolicyAsController(policyId)}
+                onResumeTraining={(policyId) => void handleResumeTrainingFromPolicy(policyId)}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </main>
   );
 }

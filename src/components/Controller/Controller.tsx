@@ -34,11 +34,11 @@ export function Controller({ core, onManualInput }: ControllerProps) {
   );
 
   return (
-    <div data-testid="gba-controller">
-      <div>{DPAD.map(renderButton)}</div>
-      <div>{FACE.map(renderButton)}</div>
-      <div>{SYSTEM.map(renderButton)}</div>
-      <div>{SHOULDER.map(renderButton)}</div>
+    <div className="gba-controller" data-testid="gba-controller">
+      <div className="shoulder-group">{SHOULDER.map(renderButton)}</div>
+      <div className="dpad-group">{DPAD.map(renderButton)}</div>
+      <div className="face-group">{FACE.map(renderButton)}</div>
+      <div className="system-group">{SYSTEM.map(renderButton)}</div>
     </div>
   );
 }

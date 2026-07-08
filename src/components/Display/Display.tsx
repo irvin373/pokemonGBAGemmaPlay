@@ -23,7 +23,7 @@ export function Display({ core, onAttached }: DisplayProps) {
       width={240}
       height={160}
       data-testid="gba-display"
-      style={{ width: '480px', height: '320px', imageRendering: 'pixelated' }}
+      className="gba-screen"
     />
   );
 }
